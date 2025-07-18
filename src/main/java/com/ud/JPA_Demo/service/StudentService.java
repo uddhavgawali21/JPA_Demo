@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -28,16 +29,38 @@ public class StudentService {
 
     }
     @Transactional
-    public void updateById(Student newstudent,int id){
-         studentRepo.findById(id).map(student -> {
-             student.setName(newstudent.getName());
-             student.setCity(newstudent.getCity());
-             student.setAge(newstudent.getAge());
+    public String updateById(Student newstudent,int id){
+        Optional<Student> student = studentRepo.findById(id);
+        if (student.isPresent()) {
+            Student dbstud = student.get();
+            dbstud.setName(newstudent.getName());
+            dbstud.setCity(newstudent.getCity());
+            dbstud.setAge(newstudent.getAge());
+            studentRepo.save(dbstud);
+            return "Student data updated";
+        }
+        else return "Student not found";
 
-             return studentRepo.save(student);
-
-         });
-
+    }
+    public String partialUpdate(Map<String,Object> newstudent, int id){
+        Optional<Student> student = studentRepo.findById(id);
+        if (student.isPresent()) {
+            Student dbstud = student.get();
+            if (newstudent.containsKey("name")){
+                dbstud.setName(newstudent.get("name").toString());
+            }
+            if (newstudent.containsKey("city")){
+                dbstud.setCity(newstudent.get("city").toString());
+            }
+            if (newstudent.containsKey("age")){
+                dbstud.setAge((Integer) newstudent.get("age"));
+            }
+            studentRepo.save(dbstud);
+            return "Data updated";
+        }
+        else {
+            return "Student not found";
+        }
     }
 
 }

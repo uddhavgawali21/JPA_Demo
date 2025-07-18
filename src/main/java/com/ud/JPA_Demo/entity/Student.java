@@ -6,21 +6,25 @@ import jakarta.persistence.*;
 public class Student {
 
     @Id                     //make primary key
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(name = "F_name")          //To change column name in db
+    @Column(name = "f_name")          //To change column name in db
     private String name;
     private String city;
     private int age;
 
     public Student(){};
 
-    public Student(String name, String city, int age,int id) {
+    public Student(int id,String name, String city, int age) {
         this.id = id;
         this.name = name;
         this.city = city;
         this.age = age;
+    }
+
+    public int getId() {
+        return id;
     }
 
     public String getName() {

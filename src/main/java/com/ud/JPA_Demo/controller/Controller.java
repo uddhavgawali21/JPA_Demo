@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -37,9 +38,13 @@ public class Controller {
         service.deleteById(id);
         return "Student with id "+id+" is deleted";
     }
-    @PutMapping("/updateStudent_id:{id}")
-    public String updateById(@RequestBody Student student ,@PathVariable int id){
-        service.updateById(student,id);
-        return "Student data updated";
+    @PutMapping("/updateStudent")
+    public String updateById(@RequestBody Student student, @RequestParam int id){
+        return service.updateById(student,id);
     }
+    @PatchMapping("/Partial")
+    public String partialUpdate(@RequestBody Map<String,Object> student,@RequestParam int id){
+        return service.partialUpdate(student,id);
+    }
+
 }
